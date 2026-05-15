@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Student Attendance System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Admin Dashboard</h1>
+            
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5>Classes</h5>
+                            <h2>{{ classes|length }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5>Students</h5>
+                            <h2>{{ students|length }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h5>Teachers</h5>
+                            <h2>{{ teachers|length }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <h5>Today's Records</h5>
+                            <h2>{{ today_attendance_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Class</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ url_for('add_class') }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Class Name</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Section</label>
+                                    <input type="text" class="form-control" name="section" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Class</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Student</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ url_for('add_student') }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Student Name</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Roll Number</label>
+                                    <input type="text" class="form-control" name="roll_no" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Class</label>
+                                    <select class="form-control" name="class_id" required>
+                                        <option value="">Select Class</option>
+                                        {% for class in classes %}
+                                        <option value="{{ class.id }}">{{ class.name }} - {{ class.section }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Student</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add Teacher</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ url_for('add_teacher') }}">
+                                <div class="mb-3">
+                                    <label class="form-label">Teacher Name</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-info">Add Teacher</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Tables -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Current Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6>Classes</h6>
+                                    <ul class="list-group">
+                                        {% for class in classes %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            {{ class.name }} - {{ class.section }}
+                                            <a href="{{ url_for('delete_class', class_id=class.id) }}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Delete this class?')">Delete</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Students</h6>
+                                    <ul class="list-group">
+                                        {% for student in students %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            {{ student.name }} ({{ student.roll_no }})
+                                            <a href="{{ url_for('delete_student', student_id=student.id) }}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Delete this student?')">Delete</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Teachers</h6>
+                                    <ul class="list-group">
+                                        {% for teacher in teachers %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            {{ teacher.name }} ({{ teacher.email }})
+                                            <a href="{{ url_for('delete_teacher', teacher_id=teacher.id) }}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Delete this teacher?')">Delete</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

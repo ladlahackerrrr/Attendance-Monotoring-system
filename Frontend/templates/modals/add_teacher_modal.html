@@ -1,0 +1,176 @@
+<!-- Add Teacher Modal -->
+<div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTeacherModalLabel">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Add New Teacher
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('add_teacher') }}" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="teacherName" class="form-label">
+                                <i class="fas fa-user me-2"></i>Teacher Name
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="teacherName" 
+                                   name="name" 
+                                   placeholder="Enter teacher full name"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please provide a valid teacher name.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="teacherEmail" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="teacherEmail" 
+                                   name="email" 
+                                   placeholder="Enter email address"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please provide a valid email address.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="teacherPassword" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="teacherPassword" 
+                                   name="password" 
+                                   placeholder="Enter password (minimum 6 characters)"
+                                   minlength="6"
+                                   required>
+                            <div class="invalid-feedback">
+                                Password must be at least 6 characters long.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if classes %}
+                    <div class="mt-4">
+                        <h6 class="mb-3">
+                            <i class="fas fa-school me-2"></i>Assign Classes
+                        </h6>
+                        <div class="row g-2">
+                            {% for class in classes %}
+                            <div class="col-md-6">
+                                <div class="form-check form-check-card">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="class_ids" 
+                                           value="{{ class.id }}" 
+                                           id="class{{ class.id }}">
+                                    <label class="form-check-label" for="class{{ class.id }}">
+                                        <div class="class-card">
+                                            <div class="class-icon">
+                                                <i class="fas fa-school"></i>
+                                            </div>
+                                            <div class="class-info">
+                                                <strong>{{ class.name }}</strong>
+                                                <small class="text-muted">{{ class.section }}</small>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the classes this teacher will manage.
+                        </small>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>No classes available!</strong> You can assign classes to this teacher later.
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Example: Name: "Prof. Johnson", Email: "teacher@school.com"
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Teacher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-check-card {
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-check-card .form-check-input {
+        display: none;
+    }
+    
+    .form-check-card .form-check-label {
+        width: 100%;
+        cursor: pointer;
+    }
+    
+    .class-card {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        background: var(--bg-white);
+    }
+    
+    .class-card:hover {
+        border-color: var(--primary-color);
+        background: rgba(37, 99, 235, 0.05);
+    }
+    
+    .form-check-input:checked + .form-check-label .class-card {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.05));
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .class-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .class-info strong {
+        display: block;
+        color: var(--text-primary);
+    }
+    
+    .class-info small {
+        color: var(--text-secondary);
+    }
+</style>
