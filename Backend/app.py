@@ -6,8 +6,8 @@ import os
 
 app = Flask(
     __name__,
-    template_folder='../frontend/templates',
-    static_folder='../frontend/static'
+    template_folder='../Frontend/templates',
+    static_folder='../Frontend/static'
 )
 app.secret_key = "your-secret-key-change-in-production"
 
